@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>暗面与光面 · 17 维人格倾向扫描</title>
+<style>
+:root{
+  --bg:#0c0e13; --panel:#151a24; --panel2:#1c2231; --line:#2a3346;
+  --txt:#e9edf5; --dim:#8b97ad; --acc:#7c9cff; --acc2:#ff7f9e;
+  --ok:#43d19e; --warn:#ffb84d; --bad:#ff6b6b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:radial-gradient(1100px 680px at 50% -12%,#1b2233 0%,var(--bg) 62%);
+  color:var(--txt); font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; min-height:100vh;
+}
+.wrap{max-width:860px;margin:0 auto;padding:28px 20px 90px}
+@keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+section:not(.hidden){animation:pagein .38s cubic-bezier(.2,.7,.3,1) both}
+body{animation:fadein .35s ease both}
+.hidden{display:none!important}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:.5px}
+h2{font-size:19px;margin:0 0 14px}
+h3{font-size:15px;margin:22px 0 10px;color:var(--dim);font-weight:600;letter-spacing:1px}
+p{margin:8px 0}
+.sub{color:var(--dim);font-size:13.5px}
+.tag{display:inline-block;font-size:11.5px;color:var(--dim);border:1px solid var(--line);
+  border-radius:999px;padding:2px 10px;margin:0 6px 6px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin:16px 0}
+.btn{display:inline-block;cursor:pointer;border:1px solid var(--line);background:var(--panel2);
+  color:var(--txt);border-radius:12px;padding:12px 20px;font-size:15px;font-family:inherit;
+  transition:.16s; margin:6px 8px 6px 0}
+.btn:hover{border-color:var(--acc);background:#222c40}
+.btn.primary{background:linear-gradient(135deg,#4a6cf7,#7c9cff);border-color:transparent;color:#fff;font-weight:600}
+.btn.primary:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+textarea{width:100%;min-height:110px;background:#0a0d13;border:1px solid var(--line);border-radius:12px;
+  color:var(--txt);padding:12px;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;resize:vertical;line-height:1.55}
+.mono{font-family:ui-monospace,Consolas,monospace}
+/* ---- quiz ---- */
+.qbar{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.qbar .track{flex:1;height:5px;background:#232b3c;border-radius:99px;overflow:hidden}
+.qbar .fill{height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .3s}
+.qbar .n{font-size:12.5px;color:var(--dim);white-space:nowrap}
+.qtext{font-size:18.5px;line-height:1.65;margin:6px 0 20px;min-height:64px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;padding:14px 16px;cursor:pointer;transition:.14s;font-size:15.5px;text-align:left;color:var(--txt);font-family:inherit}
+.opt:hover{border-color:#3d4a66;background:var(--panel2)}
+.opt .k{flex:0 0 24px;height:24px;line-height:22px;text-align:center;border:1px solid var(--line);
+  border-radius:7px;font-size:12px;color:var(--dim)}
+.opt.sel{border-color:var(--acc);background:#1d2740}
+.opt.sel .k{border-color:var(--acc);color:var(--acc)}
+/* ---- result ---- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.radar{width:100%;height:auto;display:block}
+.bar-row{margin:9px 0}
+.bar-lab{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.bar-lab .v{color:var(--dim);font-family:ui-monospace,Consolas,monospace}
+.bar{height:8px;background:#232b3c;border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;border-radius:99px;transition:width .8s}
+.dimlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.dimcell{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.dimcell b{font-weight:600;font-size:13.5px}
+.dimcell i{font-style:normal;float:right;font-family:ui-monospace,Consolas,monospace;color:var(--dim);font-size:13px}
+.badge{display:inline-block;font-size:11px;border-radius:6px;padding:1px 7px;margin-left:7px;vertical-align:1px}
+.b-high{background:rgba(255,107,107,.18);color:#ff9b9b}
+.b-mid{background:rgba(255,184,77,.16);color:var(--warn)}
+.b-mid2{background:rgba(139,151,173,.16);color:var(--dim)}
+.b-low{background:rgba(105,183,255,.14);color:#69b7ff}
+.b-vlow{background:rgba(80,110,160,.18);color:#7d93b8}
+.top3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:560px){.top3{grid-template-columns:1fr}}
+.bigcard{border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 16px}
+.bc-name{font-size:13.5px;color:var(--dim)}
+.bc-val{font-size:34px;font-weight:700;line-height:1.15;margin:2px 0}
+.bc-val span{font-size:15px;font-weight:400;color:var(--dim);margin-left:1px}
+.bc-band{font-size:12px;display:inline-block;border-radius:6px;padding:1px 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.chiplab{font-size:12.5px;color:var(--dim);margin-right:2px}
+.chip{cursor:pointer;font-family:inherit;font-size:12.5px;color:var(--dim);background:transparent;
+  border:1px solid var(--line);border-radius:99px;padding:4px 12px;transition:.15s}
+.chip:hover{border-color:#3d4a66;color:var(--txt)}
+.chip.on{color:var(--txt)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--dim);margin-top:6px;padding-left:6px}
+.legend .lg{display:flex;align-items:center;gap:6px}
+.legend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.cmprow{display:flex;align-items:center;gap:12px;margin:9px 0}
+.cmpname{flex:0 0 96px;font-size:13.5px}
+.cmpbar{flex:1;height:6px;background:#1b2130;border-radius:99px;overflow:hidden}
+.cmpbar i{display:block;height:100%;border-radius:99px}
+.cmpval{flex:0 0 44px;text-align:right;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.note{font-size:12.8px;color:var(--dim);border-left:2px solid var(--line);padding-left:12px;margin:14px 0}
+.kv{font-size:13px;color:var(--dim);margin:4px 0}
+.kv b{color:var(--txt);font-weight:600}
+code{background:#0a0d13;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12.5px}
+hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+
+#splash{position:fixed;inset:0;z-index:9999;background:#0b0d12;display:flex;align-items:center;justify-content:center;
+  animation:spOut 1.35s cubic-bezier(.4,0,.2,1) forwards}
+.sp-inner{text-align:center}
+.sp-title{font-size:30px;letter-spacing:6px;color:#e9edf5;font-weight:600;
+  animation:spTitle .9s cubic-bezier(.2,.8,.2,1) both}
+.sp-line{width:0;height:1px;background:linear-gradient(90deg,transparent,#7c9cff,transparent);margin:18px auto 14px;
+  animation:spLine .9s .15s cubic-bezier(.2,.8,.2,1) both}
+.sp-sub{font-size:12.5px;color:#6b7891;letter-spacing:3px;animation:spSub .7s .35s both}
+@keyframes spTitle{from{opacity:0;transform:translateY(14px);letter-spacing:14px}to{opacity:1;transform:none;letter-spacing:6px}}
+@keyframes spLine{from{width:0;opacity:0}to{width:220px;opacity:1}}
+@keyframes spSub{from{opacity:0}to{opacity:1}}
+@keyframes spOut{0%{opacity:1}72%{opacity:1}100%{opacity:0;visibility:hidden}}
+.radar-in{transform-origin:330px 336px;animation:radarIn .85s cubic-bezier(.2,.85,.25,1) both}
+@keyframes radarIn{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes peakPulse{0%,100%{opacity:.35;r:10}50%{opacity:.85;r:14}}
+.peak-halo{animation:peakPulse 2.2s ease-in-out infinite}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="sp-inner">
+    <div class="sp-title">暗面与光面</div>
+    <div class="sp-line"></div>
+    <div class="sp-sub">正在准备题目…</div>
+  </div>
+</div>
+<div class="wrap">
+
+  <!-- ============ HOME ============ -->
+  <section id="home">
+    <h1>暗面与光面</h1>
+    <p class="sub">核心 68 题 + 自适应深挖 · 17 个维度 · 纯本地运算 · 结果可复现</p>
+    <div style="margin-top:14px">
+      <span class="tag">七宗罪</span><span class="tag">暗黑四维</span><span class="tag">私密偏好</span><span class="tag">怜悯 / 母性 / 纯爱</span><span class="tag">不联网</span>
+    </div>
+
+    <div class="card">
+      <h2>开始之前</h2>
+      <p class="sub">这不是诊断，是一面镜子。题目都是生活情境，没有「正确选项」，也没有哪道题在明着测哪个维度——所以别试着「答得好看」，那只会让结果变成一张假的自画像。</p>
+      <p class="sub">建议：安静、不被打断，凭第一反应答。全凭直觉约 12–15 分钟。</p>
+      <div style="margin-top:16px">
+        <button class="btn primary" id="btnStart">开始作答</button>
+        <button class="btn" id="btnResume">继续上次</button>
+      </div>
+    </div>
+
+    <div class="card" id="labOnly" style="display:none">
+      <h2>只重测改动过的题</h2>
+      <p class="sub">这一轮我改了 7 道题：<b>q07 q13 q15 q49 q56 q61 q62</b>。把上次的结果代码贴进来，就只需要重答这 7 道，其余沿用旧答案，分数会整体重算。<b>只在 ?retest=1 链接下出现。</b></p>
+      <textarea id="codePatch" placeholder="PT1....（贴上次的结果代码）"></textarea>
+      <div style="margin-top:12px">
+        <button class="btn primary" id="btnRetest">只答这 7 题</button>
+        <span id="patchErr" class="sub" style="color:var(--bad)"></span>
+      </div>
+    </div>
+
+    <div class="card" id="labData" style="display:none">
+      <h2>数据采集（本地）</h2>
+      <p class="sub">你说的「真正收集数据」我做成了这个：每答完一份，匿名答案会存在<b>你自己的浏览器</b>里，不上传任何地方。攒够 30 份，百分位就改用实测分布，而不是模型推算；攒够几百份，它就是一份真的常模。</p>
+      <p class="sub" id="sampleStat"></p>
+      <div style="margin-top:12px">
+        <button class="btn" id="btnExportSamples">导出样本</button>
+        <button class="btn" id="btnImportSamples">合并样本</button>
+        <button class="btn ghost" id="btnSampleStat">刷新统计</button>
+      </div>
+      <textarea id="sampleIO" placeholder="导入时把别人导出的 JSON 贴到这里，再点「合并样本」" style="margin-top:12px"></textarea>
+    </div>
+
+    </section>
+
+  <!-- ============ AGE ============ -->
+  <section id="age" class="hidden">
+    <h1>先确认一下</h1>
+    <p class="sub">年龄只用来把你分进对应年龄段的常模桶，不保存生日、不做身份识别。</p>
+    <div class="card">
+      <label class="sub" for="ageIn">你的年龄</label>
+      <div style="display:flex;gap:12px;align-items:center;margin:10px 0 18px">
+        <input id="ageIn" type="number" min="1" max="99" inputmode="numeric"
+               style="width:120px;background:#0a0d13;border:1px solid var(--line);border-radius:10px;color:var(--txt);padding:10px 12px;font-size:16px;font-family:inherit" />
+        <span class="sub">岁</span>
+      </div>
+      <label class="sub" style="display:flex;gap:8px;align-items:center;cursor:pointer">
+        <input id="agree" type="checkbox" checked /> 允许把本次作答<b>匿名</b>存进本地样本池（用于建立实测常模）
+      </label>
+      <div style="margin-top:18px">
+        <button class="btn primary" id="btnAgeOk">继续</button>
+        <span id="ageErr" class="sub" style="color:var(--bad)"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz" class="hidden">
+    <div class="qbar">
+      <span class="n" id="qnum">1 / 80</span>
+      <div class="track"><div class="fill" id="qfill"></div></div>
+      <span class="n" id="qcat"></span>
+    </div>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="qopts"></div>
+    <div style="margin-top:22px">
+      <button class="btn ghost" id="btnPrev">上一题</button>
+      <button class="btn ghost" id="btnQuit">退出</button>
+    </div>
+    <p class="sub" style="margin-top:16px">键盘 1–5 选择，← 返回上一题</p>
+  </section>
+
+  <!-- ============ DONE（先给代码，不主动出图） ============ -->
+  <section id="done" class="hidden">
+    <h1>答题完成</h1>
+    <p class="sub" id="doneMeta"></p>
+
+    <div class="card">
+      <h2>你的结果代码</h2>
+      <p class="sub">先不急着看图。这串代码就是全部答案与分数，把它存下来 —— 站内分析、发给别的 AI、或者过几个月再重新解读，都用它。</p>
+      <textarea id="codeDone" readonly style="min-height:130px"></textarea>
+      <div style="margin-top:12px">
+        <button class="btn primary" id="btnCopyDone">复制代码</button>
+        <button class="btn" id="btnAnalyze">站内分析（出雷达图）</button>
+        <button class="btn" id="btnCopyPrompt2">复制 AI 解说提示词</button>
+      </div>
+      <div class="note">
+        站内分析用的是同一张权重矩阵，任何时候解析同一串代码，得到的图完全一样。
+        发给外部 AI 时，提示词里的数字已经算好，并要求它不得修改任何数值——所以换模型不会换结论。
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="btn ghost" id="btnHome2">返回首页</button>
+    </div>
+  </section>
+
+  <!-- ============ RESULT ============ -->
+  <section id="result" class="hidden">
+    <h1>结果</h1>
+    <p class="sub" id="resMeta"></p>
+
+    <div class="card">
+      <h2>最突出的三个</h2>
+      <div class="top3" id="topCards"></div>
+      <h2 style="margin-top:24px">最平的两个</h2>
+      <div class="top3" id="lowCards"></div>
+      <div class="note" style="margin-top:18px">
+        数字是<b>百分位</b>，不是得分。<b>50</b> = 参照人群的中位，<b>90</b> = 比九成人更明显，<b>10</b> = 比九成人更淡。<br>
+        没有「满分」这回事——百分位只表示你在参照人群里的位置。
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>七宗罪（7 轴）</h2>
+      <div class="chips" id="archChips"></div>
+      <svg class="radar" id="radar" viewBox="0 0 660 660"></svg>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <div class="card">
+      <h2 id="cmpTitle">和「普通人」比</h2>
+      <div id="cmpList"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2>暗黑面</h2>
+        <div id="darkBars"></div>
+      </div>
+      <div class="card">
+        <h2>私密偏好</h2>
+        <div id="intBars"></div>
+        <p class="sub" style="margin-top:12px">这一层只是偏好结构的描述，不涉及任何行为判断。</p>
+      </div>
+      <div class="card">
+        <h2>正向</h2>
+        <div id="posBars"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>全部 17 维</h2>
+      <div class="dimlist" id="dimAll"></div>
+      <div class="note" id="consNote"></div>
+    </div>
+
+    <div class="card">
+      <button class="btn" id="btnAgain">重新作答</button>
+      <button class="btn ghost" id="btnHome">返回首页</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   1. 维度定义（25 个）
+   g: sin 罪 / virtue 德 / dark 暗黑 / intimate 私密
+   ========================================================= */
+/* =========================================================
+   psyche-scan v4 题库
+   17 维度 · 核心 68 题（每维 4 题）+ 深挖 34 题（每维 2 题）
+   数据格式：
+     [ id, 主维度, 题干, [ [选项文字, 主维度取值0-1, 附加维度对象?], ... ] ]
+   每个选项都强制带主维度取值 —— 结构上保证该维度每题都有信息量。
+   ========================================================= */
+
+/* =========================================================
+   psyche-scan v4 题库
+   17 维度 · 核心 68 题（每维 4 题）+ 深挖 34 题（每维 2 题）
+   数据格式：
+     [ id, 主维度, 题干, [ [选项文字, 主维度取值0-1, 附加维度对象?], ... ] ]
+   每个选项都强制带主维度取值 —— 结构上保证该维度每题都有信息量。
+   ========================================================= */
+
+/* =========================================================
+   psyche-scan v4 题库
+   17 维度 · 核心 68 题（每维 4 题）+ 深挖 34 题（每维 2 题）
+   数据格式：
+     [ id, 主维度, 题干, [ [选项文字, 主维度取值0-1, 附加维度对象?], ... ] ]
+   每个选项都强制带主维度取值 —— 结构上保证该维度每题都有信息量。
+   ========================================================= */
+
+/* =========================================================
+   psyche-scan v4 题库
+   17 维度 · 核心 68 题（每维 4 题）+ 深挖 34 题（每维 2 题）
+   数据格式：
+     [ id, 主维度, 题干, [ [选项文字, 主维度取值0-1, 附加维度对象?], ... ] ]
+   每个选项都强制带主维度取值 —— 结构上保证该维度每题都有信息量。
+   ========================================================= */
+
+/* =========================================================
+   psyche-scan v4 题库
+   17 维度 · 核心 68 题（每维 4 题）+ 深挖 34 题（每维 2 题）
+   数据格式：
+     [ id, 主维度, 题干, [ [选项文字, 主维度取值0-1, 附加维度对象?], ... ] ]
+   每个选项都强制带主维度取值 —— 结构上保证该维度每题都有信息量。
+   ========================================================= */
+
+/* =========================================================
+   psyche-scan v4 题库
+   17 维度 · 核心 68 题（每维 4 题）+ 深挖 34 题（每维 2 题）
+   数据格式：
+     [ id, 主维度, 题干, [ [选项文字, 主维度取值0-1, 附加维度对象?], ... ] ]
+   每个选项都强制带主维度取值 —— 结构上保证该维度每题都有信息量。
+   ========================================================= */
+
+/* =========================================================
+   psyche-scan v4 题库
+   17 维度 · 核心 68 题（每维 4 题）+ 深挖 34 题（每维 2 题）
+   数据格式：
+     [ id, 主维度, 题干, [ [选项文字, 主维度取值0-1, 附加维度对象?], ... ] ]
+   每个选项都强制带主维度取值 —— 结构上保证该维度每题都有信息量。
+   ========================================================= */
+
+/* =========================================================
+   psyche-scan v4 题库
+   17 维度 · 核心 68 题（每维 4 题）+ 深挖 34 题（每维 2 题）
+   数据格式：
+     [ id, 主维度, 题干, [ [选项文字, 主维度取值0-1, 附加维度对象?], ... ] ]
+   每个选项都强制带主维度取值 —— 结构上保证该维度每题都有信息量。
+   ========================================================= */
+
+const DIMS = {
+  /* --- 阴暗面：七宗罪 --- */
+  pride:      {n:'傲慢', g:'sin'},
+  envy:       {n:'嫉妒', g:'sin'},
+  wrath:      {n:'暴怒', g:'sin'},
+  sloth:      {n:'懒惰', g:'sin'},
+  greed:      {n:'贪婪', g:'sin'},
+  gluttony:   {n:'暴食', g:'sin'},
+  lust:       {n:'色欲', g:'sin'},
+  /* --- 阴暗面：暗黑四维 --- */
+  mach:       {n:'权谋', g:'dark'},
+  narc:       {n:'自恋', g:'dark'},
+  psych:      {n:'冷酷', g:'dark'},
+  sadism:     {n:'施虐', g:'dark'},
+  /* --- 私密 --- */
+  dom:        {n:'支配', g:'intimate'},
+  sub:        {n:'臣服', g:'intimate'},
+  transgression: {n:'越界', g:'intimate'},
+  /* --- 正向 --- */
+  compassion: {n:'怜悯', g:'virtue'},
+  nurturing:  {n:'母性', g:'virtue'},
+  purelove:   {n:'纯爱', g:'virtue'}
+};
+
+const RAW = [
+
+/* ========== 傲慢 pride ========== */
+['a01','pride','你走进一个场合，发现在场的人几乎都不如你。第一感觉是——',[
+  ['有点无聊，没什么可学的',0.85,{narc:0.4}],
+  ['会找里面最强的那个聊',0.30,{envy:0.25}],
+  ['先看看，都一样',0.50,{}],
+  ['会有点不自在，怕被比较',0.12,{}]
+]],
+['a02','pride','一个和你平级的同事，当着别人的面纠正你，而他确实是对的。',[
+  ['立刻承认，谢谢他',0.15,{compassion:0.3}],
+  ['表面接受，心里不服',0.65,{wrath:0.3}],
+  ['觉得被冒犯了',0.85,{wrath:0.4}],
+  ['当场想找他也错的地方',0.75,{wrath:0.55,mach:0.3}]
+]],
+['a03','pride','一家很贵的店，服务却很一般。',[
+  ['会觉得「这种地方也就这水平」',0.85,{}],
+  ['会直接提意见',0.55,{dom:0.45}],
+  ['吃完就走，不说了',0.30,{}],
+  ['会有点心虚，是不是我要求太高',0.05,{compassion:0.45}]
+]],
+['a04','pride','一个能力不如你、但更会来事的人，升得比你快。',[
+  ['觉得凭什么',0.85,{envy:0.6}],
+  ['会研究他到底做对了什么',0.40,{mach:0.4}],
+  ['承认这方面我确实不如他',0.15,{compassion:0.25}],
+  ['无所谓，跟我没关系',0.30,{}]
+]],
+
+/* ========== 嫉妒 envy ========== */
+['a05','envy','你最好的朋友买了你一直想要的东西。',[
+  ['真心替他高兴',0.10,{compassion:0.5}],
+  ['会问在哪买的，自己也想要',0.35,{greed:0.35}],
+  ['心里有点不是滋味',0.65,{}],
+  ['会想他哪来的钱',0.80,{psych:0.2}]
+]],
+['a06','envy','会上，同事被老板当众表扬，而那部分工作其实你也做了。',[
+  ['挺好，他确实做得好',0.12,{compassion:0.45}],
+  ['会想把「其实是我做的」说出来',0.55,{pride:0.45}],
+  ['会有点闷，但不表现',0.60,{}],
+  ['记下来，下次这个位置我来占',0.50,{mach:0.6}]
+]],
+['a07','envy','刷到一个同龄人，过得比你好很多。',[
+  ['划走，不关心',0.20,{}],
+  ['会看很久，甚至会点进主页',0.60,{envy:0.55}],
+  ['会有点难受，然后放下手机',0.80,{}],
+  ['会去查他到底怎么做到的',0.45,{mach:0.35}]
+]],
+['a08','envy','你讨厌的人走运了。',[
+  ['替他高兴',0.05,{compassion:0.4}],
+  ['无感',0.30,{}],
+  ['会有点不爽',0.70,{wrath:0.3}],
+  ['觉得这世界不公平',0.85,{wrath:0.4,psych:0.2}]
+]],
+
+/* ========== 暴怒 wrath ========== */
+['a09','wrath','你听说一个熟人背后说了你的坏话。',[
+  ['直接找他谈',0.35,{dom:0.4}],
+  ['会气很久，但不会做什么',0.60,{}],
+  ['会找机会让他也难受',0.85,{sadism:0.5}],
+  ['算了，不值得',0.15,{compassion:0.35}]
+]],
+['a10','wrath','你赶时间，前面的人慢吞吞挡着路。',[
+  ['绕过去',0.20,{}],
+  ['心里很烦',0.55,{}],
+  ['会出声提醒，语气不太好',0.75,{}],
+  ['会故意挤他一下',0.90,{sadism:0.45}]
+]],
+['a11','wrath','最亲近的人做了一件让你很失望的事。',[
+  ['会直接说清楚',0.35,{dom:0.45}],
+  ['会冷着脸不说话',0.60,{sub:0.2}],
+  ['会直接爆发',0.85,{}],
+  ['会先想是不是自己的问题',0.20,{compassion:0.4}]
+]],
+['a12','wrath','你投诉了，对方态度还很横。',[
+  ['要求升级到经理',0.50,{dom:0.55}],
+  ['当场跟他吵',0.80,{}],
+  ['写个差评了事',0.40,{}],
+  ['不说了，但记很久',0.60,{}]
+]],
+
+/* ========== 懒惰 sloth ========== */
+['a13','sloth','今天必须做完的事，你打开电脑之后——',[
+  ['直接开始',0.10,{}],
+  ['先刷十分钟再说',0.50,{}],
+  ['先挑最容易的部分做',0.30,{mach:0.25}],
+  ['一路拖到晚上',0.85,{}]
+]],
+['a14','sloth','周末两天没有任何安排。',[
+  ['会主动安排点事',0.15,{}],
+  ['睡到自然醒，然后随便过',0.50,{}],
+  ['基本躺着',0.80,{}],
+  ['会焦虑，但也没动',0.65,{wrath:0.2}]
+]],
+['a15','sloth','一件需要长期坚持的事（健身、学语言、写作），你——',[
+  ['能坚持下来',0.10,{}],
+  ['断断续续',0.50,{}],
+  ['开始过三次，都没成',0.80,{}],
+  ['从来没真正开始',0.90,{}]
+]],
+['a16','sloth','房间角落堆着一些该收但没收的东西。',[
+  ['会立刻收掉',0.10,{}],
+  ['有空再收',0.50,{}],
+  ['一直放着',0.80,{}],
+  ['已经习惯了，看不见',0.90,{}]
+]],
+
+/* ========== 贪婪 greed ========== */
+['a17','greed','一个能让你收入明显变高的机会，但会占掉你所有空余时间。',[
+  ['会做',0.80,{}],
+  ['会权衡很久',0.45,{}],
+  ['不会，时间更重要',0.10,{compassion:0.35}],
+  ['会做一部分，留点余地',0.65,{mach:0.35}]
+]],
+['a18','greed','一个可以免费拿、而且没人会知道的东西。',[
+  ['不拿',0.05,{}],
+  ['会犹豫',0.40,{}],
+  ['会拿',0.75,{}],
+  ['会多拿一些',0.95,{psych:0.3}]
+]],
+['a19','greed','朋友请你吃饭，账单来了。',[
+  ['主动去付',0.10,{compassion:0.35}],
+  ['等他付',0.50,{}],
+  ['提议 AA',0.25,{}],
+  ['先看谁先动',0.45,{mach:0.3}]
+]],
+['a20','greed','你已经有很多同类的东西，但出了更好的版本。',[
+  ['不买，够用就行',0.12,{}],
+  ['会看看，但忍住',0.40,{}],
+  ['会买',0.75,{}],
+  ['会买最好的那个',0.92,{narc:0.35}]
+]],
+
+/* ========== 暴食 gluttony ========== */
+['a21','gluttony','你最喜欢的菜，而你已经吃饱了。',[
+  ['不吃了',0.08,{}],
+  ['会再吃两口',0.45,{}],
+  ['会吃到撑',0.85,{}],
+  ['会打包，等下继续',0.60,{}]
+]],
+['a22','gluttony','压力很大的一段时间，你最先想到的是——',[
+  ['去运动，把劲儿用掉',0.10,{}],
+  ['找人说话，把这事讲一遍',0.20,{narc:0.2}],
+  ['睡一觉，睡过去',0.25,{sloth:0.7}],
+  ['弄点吃的，最好是重口味',0.80,{}]
+]],
+['a23','gluttony','深夜刷到吃播。',[
+  ['划走',0.12,{}],
+  ['会看一会儿',0.50,{}],
+  ['会直接下单',0.85,{}],
+  ['会去翻冰箱',0.75,{}]
+]],
+['a24','gluttony','你一般什么时候停筷子？',[
+  ['七分饱就停',0.08,{}],
+  ['吃饱就停',0.35,{}],
+  ['吃不下了才停',0.70,{}],
+  ['要撑到有点难受',0.92,{}]
+]],
+
+/* ========== 色欲 lust ========== */
+['a25','lust','你遇到一个很有吸引力的人，但你清楚对方不合适。',[
+  ['不会多想',0.12,{}],
+  ['会多看几眼',0.50,{}],
+  ['会想认识，哪怕知道不合适',0.80,{transgression:0.4}],
+  ['会主动制造机会',0.92,{mach:0.3,transgression:0.5}]
+]],
+['a26','lust','一段没有感情、只有身体的长期关系，你能接受吗？',[
+  ['不能接受',0.10,{purelove:0.6}],
+  ['看情况',0.45,{}],
+  ['可以接受',0.80,{}],
+  ['其实更喜欢这样',0.92,{purelove:0.05}]
+]],
+['a27','lust','公共场合，一个身材很好的人从你面前走过。',[
+  ['不会注意',0.08,{}],
+  ['会看一眼',0.42,{}],
+  ['会看几眼',0.70,{}],
+  ['会一直注意',0.90,{}]
+]],
+['a28','lust','关于性的念头，出现的频率大概是——',[
+  ['很少',0.12,{}],
+  ['偶尔',0.45,{}],
+  ['经常',0.75,{}],
+  ['几乎每天',0.92,{}]
+]],
+
+/* ========== 权谋 mach ========== */
+['b01','mach','你需要让一个人去做他本来不愿意做的事。',[
+  ['把利害关系直接讲清楚',0.25,{}],
+  ['先聊他在意的事，再引到正题',0.62,{compassion:0.35}],
+  ['制造一个只能这么选的情境',0.92,{dom:0.4}],
+  ['不说，等他自然这么做',0.70,{dom:0.3}]
+]],
+['b02','mach','你想在一群人里占据主动。',[
+  ['用观点说话',0.30,{pride:0.45}],
+  ['先摸清谁说话最有分量',0.62,{}],
+  ['顺着多数人的意思，再慢慢引导',0.88,{dom:0.45}],
+  ['无所谓，懒得管',0.15,{}]
+]],
+['b03','mach','一个不太熟的客户，问了你一个如实回答会吃亏的问题。',[
+  ['如实回答',0.10,{compassion:0.3}],
+  ['模糊带过去',0.50,{}],
+  ['反问回去',0.70,{dom:0.35}],
+  ['编一个更好听的版本',0.88,{psych:0.3}]
+]],
+['b04','mach','你怎么看「真诚」这件事？',[
+  ['是底线',0.10,{compassion:0.4}],
+  ['分场合',0.45,{}],
+  ['有用的时候才有用',0.80,{}],
+  ['它本身就是一种策略',0.92,{narc:0.3}]
+]],
+
+/* ========== 自恋 narc ========== */
+['b05','narc','一群人聊天，话题转到了一个你不太熟的人身上。',[
+  ['会顺着问下去',0.15,{}],
+  ['会听着，但走神想自己的事',0.42,{}],
+  ['会找个缝把话题接到自己身上',0.78,{}],
+  ['会直接打断，讲自己的',0.92,{}]
+]],
+['b06','narc','你发的东西没什么人回应。',[
+  ['无所谓',0.15,{}],
+  ['会想是不是发得不好',0.45,{mach:0.2}],
+  ['会有点难受',0.72,{}],
+  ['会删掉，换个时间重发',0.80,{pride:0.3}]
+]],
+['b07','narc','一个你不太看得上的人，夸你「你很有品味」。',[
+  ['说声谢谢',0.30,{}],
+  ['会顺势多讲一点',0.58,{}],
+  ['会很受用，之后反复想起',0.85,{}],
+  ['心想「他说得对」',0.90,{pride:0.5}]
+]],
+['b08','narc','一个团队项目，你的贡献并不是最大的。',[
+  ['会老实说明',0.18,{compassion:0.3}],
+  ['汇报时不会特别提别人的部分',0.55,{mach:0.4}],
+  ['会强调自己做的那块',0.75,{}],
+  ['会觉得没有我这事根本成不了',0.92,{pride:0.6}]
+]],
+
+/* ========== 冷酷 psych ========== */
+['b09','psych','看到一个陌生人遭遇了很不幸的事。',[
+  ['会跟着难受',0.10,{compassion:0.7}],
+  ['会同情，但很快过去',0.35,{}],
+  ['会觉得和我没什么关系',0.72,{}],
+  ['会有一点点说不清的兴致',0.60,{sadism:0.55}]
+]],
+['b10','psych','你必须对一个人说很伤人的实话。',[
+  ['尽量说得温和',0.12,{compassion:0.5}],
+  ['会说，但会挑时机',0.35,{}],
+  ['直接说，受不了是他的事',0.80,{}],
+  ['会有点享受说出口的那个瞬间',0.62,{sadism:0.55}]
+]],
+['b11','psych','一个交情一般的同事，在你面前哭起来。',[
+  ['会递纸巾，问他要不要换个地方聊',0.08,{compassion:0.6}],
+  ['会站着，不知道该说什么',0.30,{}],
+  ['会找个理由走开',0.70,{}],
+  ['会站在那儿看他哭完',0.90,{}]
+]],
+['b12','psych','你和一个人竞争同一个位置，而他家里刚出了事，最近状态很差。',[
+  ['会替他难受，也不会趁机',0.10,{compassion:0.7}],
+  ['照常竞争，但不提他家里的事',0.35,{}],
+  ['会在关键场合点出他最近的状态',0.75,{mach:0.4}],
+  ['会让上面注意到他状态不行',0.92,{mach:0.6,sadism:0.3}]
+]],
+
+/* ========== 施虐 sadism ========== */
+['b13','sadism','聚会上，一个你只是认识、并不熟的人出了个大丑。',[
+  ['会替他难受',0.05,{compassion:0.7}],
+  ['会觉得有点好笑',0.45,{}],
+  ['会忍不住笑出来',0.75,{}],
+  ['会想再看一遍那个画面',0.92,{}]
+]],
+['b14','sadism','你有权决定一个人的去留。',[
+  ['会尽量公平',0.10,{compassion:0.5}],
+  ['会看他的态度',0.45,{}],
+  ['会让他先紧张一阵',0.72,{dom:0.5}],
+  ['会享受他来求你',0.92,{dom:0.6}]
+]],
+['b15','sadism','你讨厌的人被当众羞辱了。',[
+  ['不太舒服',0.10,{compassion:0.4}],
+  ['有点解气',0.55,{wrath:0.4}],
+  ['很爽',0.82,{wrath:0.5}],
+  ['会想再多来一点',0.95,{wrath:0.6}]
+]],
+['b16','sadism','网上有个人因为一句话被全网围攻。',[
+  ['会替他难受，觉得过头了',0.08,{compassion:0.6}],
+  ['会看看热闹，不表态',0.35,{}],
+  ['会觉得他活该被骂',0.75,{}],
+  ['会去评论区补两句',0.92,{wrath:0.4}]
+]],
+
+/* ========== 支配 dom ========== */
+['b17','dom','一群人决定去哪吃饭，谁都不拍板。',[
+  ['直接定下来',0.82,{}],
+  ['提两三个方案让人选',0.50,{mach:0.3}],
+  ['说「都行」，其实心里有偏好',0.30,{}],
+  ['等别人定',0.12,{sub:0.6}]
+]],
+['b18','dom','你安排好的事被别人改了。',[
+  ['会明确说回去',0.75,{}],
+  ['会不高兴，但还是照做',0.42,{}],
+  ['会想办法绕回自己的安排',0.60,{mach:0.45}],
+  ['无所谓',0.12,{}]
+]],
+['b19','dom','亲密关系里，你更希望——',[
+  ['我来定节奏',0.85,{}],
+  ['一起商量',0.45,{compassion:0.3}],
+  ['谁状态好谁定',0.22,{sub:0.4}],
+  ['对方来定，我配合',0.10,{sub:0.7}]
+]],
+['b20','dom','你的下属当众质疑你的决定。',[
+  ['当场回应',0.72,{}],
+  ['会后私下解决',0.50,{mach:0.35}],
+  ['会有点慌，但撑住',0.40,{}],
+  ['会先怀疑自己',0.12,{sub:0.45}]
+]],
+
+/* ========== 臣服 sub ========== */
+['b21','sub','你的伴侣对你说「这件事我来安排，你别管了」。',[
+  ['会松一口气',0.85,{}],
+  ['会问清楚细节',0.45,{}],
+  ['会想自己来',0.12,{dom:0.7}],
+  ['先答应，再暗中调整',0.40,{mach:0.55}]
+]],
+['b22','sub','在一个完全陌生的环境里，你更希望——',[
+  ['有人带着',0.80,{}],
+  ['跟着大家一起',0.60,{}],
+  ['谁都不熟也无所谓',0.25,{}],
+  ['自己摸清楚',0.12,{dom:0.6}]
+]],
+['b23','sub','被安排得明明白白的一天。',[
+  ['很舒服',0.85,{}],
+  ['可以，但要留点空白',0.50,{}],
+  ['会闷',0.25,{dom:0.4}],
+  ['会想逃',0.08,{transgression:0.5}]
+]],
+['b24','sub','对方说「你不用想了，听我的」。',[
+  ['会安心',0.85,{}],
+  ['会先确认边界',0.45,{}],
+  ['会觉得被冒犯',0.12,{dom:0.65}],
+  ['会想把这句话反过来说',0.05,{dom:0.85,transgression:0.4}]
+]],
+
+/* ========== 越界 transgression ========== */
+['b25','transgression','一条明文规定，但明显不合理。',[
+  ['还是遵守',0.15,{}],
+  ['会绕开',0.50,{mach:0.4}],
+  ['会在没人看见的时候违反',0.72,{}],
+  ['会公开违反',0.92,{pride:0.4}]
+]],
+['b26','transgression','一件事被明确禁止，但你又很好奇。',[
+  ['不会去做',0.20,{}],
+  ['会先去查资料',0.40,{}],
+  ['会想办法试一次',0.80,{}],
+  ['越禁止越想做',0.95,{lust:0.3}]
+]],
+['b27','transgression','你在一段稳定关系里，遇到一个可能的越界机会。',[
+  ['会主动拉开距离',0.10,{purelove:0.6}],
+  ['会想，但不会做',0.45,{}],
+  ['会试探',0.75,{lust:0.5}],
+  ['会发生',0.92,{lust:0.65}]
+]],
+['b28','transgression','一条所有人都默认遵守、但没人说出口的规矩，而遵守它每回都让你吃亏。',[
+  ['还是照做，不想当那个出头的人',0.12,{}],
+  ['嘴上照做，私下自己跳过',0.50,{mach:0.5}],
+  ['会当面问一句「为什么必须这样」',0.75,{pride:0.4}],
+  ['会带头把它破掉',0.95,{pride:0.5,dom:0.45}]
+]],
+
+/* ========== 怜悯 compassion ========== */
+['c01','compassion','路上一个老人摔倒了，旁边的人都在看。',[
+  ['马上过去扶',0.90,{}],
+  ['会犹豫，怕惹麻烦',0.40,{}],
+  ['等别人先动',0.25,{}],
+  ['看一眼就走',0.05,{}]
+]],
+['c02','compassion','一个乞讨的人向你伸手。',[
+  ['会给点钱',0.70,{}],
+  ['会给，但会想他是不是骗人',0.55,{mach:0.3}],
+  ['不给，但心里不太舒服',0.35,{}],
+  ['直接走过去',0.08,{}]
+]],
+['c03','compassion','朋友失恋，半夜给你打电话。',[
+  ['会接，聊到你困',0.90,{}],
+  ['会接，但想着早点结束',0.55,{}],
+  ['会说明天再说',0.30,{}],
+  ['不接',0.05,{psych:0.6}]
+]],
+['c04','compassion','一个跟你有过节的人落难了。',[
+  ['还是会想帮他',0.85,{}],
+  ['会很矛盾',0.55,{}],
+  ['不太想管',0.25,{}],
+  ['觉得活该',0.05,{sadism:0.6}]
+]],
+
+/* ========== 母性 nurturing ========== */
+['c05','nurturing','一只受伤的小动物。',[
+  ['会带回去照顾',0.95,{compassion:0.6}],
+  ['会联系救助站',0.75,{}],
+  ['会心疼，但还是走开',0.40,{}],
+  ['没什么感觉',0.05,{psych:0.5}]
+]],
+['c06','nurturing','你的室友连续一周状态很差，明显需要有人盯一下。',[
+  ['会主动照顾',0.90,{compassion:0.6}],
+  ['会问一句，之后看他会不会说',0.55,{}],
+  ['等他开口',0.30,{}],
+  ['不会主动',0.08,{}]
+]],
+['c07','nurturing','关于小孩。',[
+  ['会想照顾，也会想有',0.90,{}],
+  ['喜欢，但不想负责',0.50,{}],
+  ['没什么感觉',0.25,{}],
+  ['会觉得烦',0.05,{psych:0.4}]
+]],
+['c08','nurturing','你最好的朋友，在你面前彻底崩溃。',[
+  ['会想把他抱住',0.90,{compassion:0.6}],
+  ['会陪着，但不太会说话',0.65,{}],
+  ['会手足无措',0.40,{}],
+  ['会想离开',0.08,{psych:0.5}]
+]],
+
+/* ========== 纯爱 purelove ========== */
+['c09','purelove','「只喜欢一个人」对你来说——',[
+  ['是前提',0.90,{}],
+  ['希望如此，但不强求',0.55,{}],
+  ['做不到也没办法',0.25,{lust:0.4}],
+  ['不太现实',0.10,{lust:0.5}]
+]],
+['c10','purelove','喜欢一个人时，你会不会在心里替他加很多想象？',[
+  ['会，而且清楚那是想象',0.85,{}],
+  ['会一点',0.55,{}],
+  ['不太会，看清了再说',0.30,{}],
+  ['完全不',0.15,{}]
+]],
+['c11','purelove','暗恋一个人很久，你会——',[
+  ['一直不说',0.75,{sub:0.5}],
+  ['找机会靠近',0.60,{}],
+  ['直接说',0.40,{dom:0.5}],
+  ['换一个人喜欢',0.18,{}]
+]],
+['c12','purelove','分开很久的人，你还会想起吗？',[
+  ['会，很久',0.88,{}],
+  ['偶尔',0.55,{}],
+  ['很少',0.28,{}],
+  ['不会',0.10,{}]
+]],
+
+/* ========== 深挖池 ========== */
+['d01','pride','开会时，你想说的被别人抢先说了。',[
+  ['会有点不爽',0.70,{}],
+  ['会补充，把它变成我的',0.60,{mach:0.5}],
+  ['心想「他说的就是我想的」',0.50,{}],
+  ['无所谓',0.20,{}]
+]],
+['d02','pride','你处在一群比你年轻很多的人中间。',[
+  ['会有点优越',0.80,{}],
+  ['会想证明自己还行',0.55,{}],
+  ['会担心跟不上',0.25,{}],
+  ['没感觉',0.40,{}]
+]],
+['d03','envy','你发现自己被排除在一个小圈子之外。',[
+  ['会想为什么',0.60,{}],
+  ['会想办法进去',0.50,{mach:0.5}],
+  ['会觉得他们也没什么意思',0.70,{pride:0.5}],
+  ['无所谓',0.20,{}]
+]],
+['d04','envy','家里人拿你和表亲比较，而你输了。',[
+  ['会记住这个人',0.65,{}],
+  ['会当场不服',0.60,{pride:0.5}],
+  ['会认',0.25,{}],
+  ['会去了解对方强在哪',0.35,{mach:0.3}]
+]],
+['d05','wrath','一个反复犯同样错误的人。',[
+  ['会耐心教',0.20,{compassion:0.5}],
+  ['会当面指出',0.50,{}],
+  ['会骂',0.85,{}],
+  ['会直接换掉他',0.60,{psych:0.45,dom:0.4}]
+]],
+['d06','wrath','邻桌几个陌生人在餐厅大声喧哗。',[
+  ['会去说',0.60,{dom:0.4}],
+  ['很烦但忍着',0.50,{}],
+  ['会瞪他',0.70,{}],
+  ['无所谓',0.20,{}]
+]],
+['d07','sloth','一个不难但很枯燥的任务。',[
+  ['一次做完',0.15,{}],
+  ['分几次做',0.45,{}],
+  ['拖到最后一刻',0.80,{}],
+  ['想办法让别人做',0.55,{mach:0.5}]
+]],
+['d08','sloth','你的手机使用时间。',[
+  ['很少',0.15,{}],
+  ['一般',0.40,{}],
+  ['很多',0.70,{}],
+  ['几乎醒着都在看',0.90,{}]
+]],
+['d09','greed','一个你能占便宜、但对方会吃亏的机会。',[
+  ['不会做',0.10,{}],
+  ['会犹豫',0.45,{}],
+  ['会占',0.80,{}],
+  ['会占，还觉得自己很聪明',0.92,{narc:0.35}]
+]],
+['d10','greed','你对「更多」的感觉。',[
+  ['现在够了',0.15,{}],
+  ['还想要一点',0.45,{}],
+  ['总想再多一点',0.80,{}],
+  ['永远不够',0.95,{}]
+]],
+['d11','gluttony','一顿很贵的自助。',[
+  ['吃自己需要的量',0.15,{}],
+  ['会想着吃回本',0.60,{}],
+  ['会吃到走不动',0.88,{}],
+  ['会顺手打包',0.50,{}]
+]],
+['d12','gluttony','这些年你的体重。',[
+  ['一直比较稳定',0.15,{}],
+  ['略有起伏',0.40,{}],
+  ['一直在涨',0.72,{}],
+  ['完全控制不住',0.90,{}]
+]],
+['d13','lust','你在一段关系里，但遇到了更心动的人。',[
+  ['不会往那想',0.15,{purelove:0.6}],
+  ['会想，但不会做',0.50,{}],
+  ['会靠近',0.80,{transgression:0.5}],
+  ['会先越界再决定',0.92,{transgression:0.75}]
+]],
+['d14','lust','关于「多看一眼」这件事。',[
+  ['完全不看',0.10,{}],
+  ['会看，但很快移开',0.35,{}],
+  ['会看',0.65,{}],
+  ['会看很久，还会找第二次',0.90,{}]
+]],
+['d15','mach','你无意中知道了同事一个要命的秘密。',[
+  ['不会用',0.15,{}],
+  ['先记着',0.60,{}],
+  ['会暗示他自己知道',0.80,{}],
+  ['会在关键时用出来',0.92,{psych:0.45}]
+]],
+['d16','mach','你需要让一个讨厌你的人改变态度。',[
+  ['直接谈',0.30,{}],
+  ['先给他点好处',0.70,{}],
+  ['制造一个他需要你的局面',0.90,{}],
+  ['不理他',0.20,{}]
+]],
+['d17','narc','别人正在讲他最得意的一件事。',[
+  ['会认真听',0.15,{compassion:0.4}],
+  ['会接一句自己的事',0.60,{}],
+  ['等他说完，就轮到我说',0.80,{}],
+  ['会有点不耐烦',0.60,{pride:0.4}]
+]],
+['d18','narc','一张你的照片，被拍得不好看。',[
+  ['无所谓',0.20,{}],
+  ['会想删掉',0.50,{}],
+  ['会要求重拍',0.70,{}],
+  ['会明显不高兴',0.82,{}]
+]],
+['d19','psych','一个同事跟你讲他的痛苦，而你其实并不关心。',[
+  ['会假装在听',0.30,{}],
+  ['会找机会结束对话',0.55,{}],
+  ['会直接说我不想听',0.80,{}],
+  ['会觉得他很烦',0.92,{}]
+]],
+['d20','psych','你的决定会伤到别人，但对你有好处。',[
+  ['会重新考虑',0.15,{compassion:0.5}],
+  ['会做，但会补偿',0.40,{}],
+  ['会做',0.75,{}],
+  ['会做，也不会再想起这件事',0.92,{}]
+]],
+['d21','sadism','一段陌生人被围堵欺负的视频。',[
+  ['会难过',0.05,{compassion:0.6}],
+  ['会看不下去',0.15,{}],
+  ['会看完',0.60,{}],
+  ['会反复看',0.92,{}]
+]],
+['d22','sadism','你生气的时候，最想做的是——',[
+  ['把事情说清楚',0.20,{}],
+  ['冷处理',0.30,{sub:0.3}],
+  ['让对方难受',0.75,{wrath:0.5}],
+  ['让对方怕我',0.92,{dom:0.55,wrath:0.5}]
+]],
+['d23','dom','你的房间或桌面。',[
+  ['一切在我规定的位置',0.82,{}],
+  ['大致有秩序',0.55,{}],
+  ['乱，但我知道东西在哪',0.35,{}],
+  ['完全不管',0.10,{}]
+]],
+['d24','dom','别人替你做决定。',[
+  ['完全不能接受',0.85,{}],
+  ['看是什么事',0.50,{}],
+  ['小事可以',0.30,{sub:0.5}],
+  ['挺好的',0.10,{sub:0.8}]
+]],
+['d25','sub','你的上司让你按他的方案做，但你判断这么干会出问题。',[
+  ['照做，反正责任在他',0.85,{}],
+  ['先执行，同时把自己的意见留个记录',0.60,{mach:0.5}],
+  ['把风险讲清楚，他不改我就照做',0.38,{dom:0.4}],
+  ['会拒绝执行这个方案',0.10,{dom:0.7}]
+]],
+['d26','sub','在一段关系里，你最怕的是——',[
+  ['失去自我',0.20,{dom:0.6}],
+  ['被冷落',0.60,{}],
+  ['对方离开',0.72,{purelove:0.5}],
+  ['没有什么好怕的',0.30,{psych:0.3}]
+]],
+['d27','transgression','规则和你想要的东西直接冲突。',[
+  ['放弃想要的',0.20,{}],
+  ['找一个合规的绕法',0.50,{mach:0.45}],
+  ['违规去做',0.80,{}],
+  ['违规，还想让别人也承认这规则很蠢',0.92,{pride:0.4}]
+]],
+['d28','transgression','「明知道不该，但还是做了」这种事——',[
+  ['很少',0.20,{}],
+  ['有过几次',0.50,{}],
+  ['挺经常',0.75,{}],
+  ['差不多就是我的常态',0.95,{}]
+]],
+['d29','compassion','一个你讨厌的人反过来求你。',[
+  ['还是会帮',0.80,{}],
+  ['会帮，但会让他记住这个人情',0.50,{mach:0.45}],
+  ['会拒绝',0.25,{}],
+  ['会看他笑话',0.05,{sadism:0.65}]
+]],
+['d30','compassion','网上看到一条求助信息。',[
+  ['会捐一点',0.75,{}],
+  ['会转发',0.55,{}],
+  ['会先怀疑真假',0.30,{}],
+  ['划走',0.08,{psych:0.4}]
+]],
+['d31','nurturing','朋友把小孩临时托给你半天。',[
+  ['会照顾得很好',0.90,{}],
+  ['会挺紧张',0.60,{}],
+  ['尽量不出事就行',0.45,{}],
+  ['会想办法推掉',0.10,{}]
+]],
+['d32','nurturing','你养过的东西（植物、宠物）。',[
+  ['养得很好',0.90,{}],
+  ['养过，但没养活',0.50,{}],
+  ['没养过，怕麻烦',0.15,{}],
+  ['不想养',0.08,{}]
+]],
+['d33','purelove','和前任有关的小东西，你会留吗？',[
+  ['会留，很多年',0.88,{}],
+  ['会留一些',0.60,{}],
+  ['很少留',0.30,{}],
+  ['不会留',0.10,{}]
+]],
+['d34','purelove','一段关系结束之后。',[
+  ['会很久走不出来',0.88,{}],
+  ['会难受一阵',0.60,{}],
+  ['恢复得比较快',0.30,{}],
+  ['会立刻开始新的',0.12,{lust:0.4}]
+]]
+];
+
+/* 把紧凑格式展开成标准题目对象 */
+const Q = RAW.map(function(row){
+  const id = row[0], primary = row[1], txt = row[2], opts = row[3];
+  return {
+    id: id,
+    type: 'scn',
+    primary: primary,
+    txt: txt,
+    opts: opts.map(function(o){
+      const s = {};
+      s[primary] = o[1];
+      if(o[2]) for(const k in o[2]) s[k] = o[2][k];
+      return {t:o[0], s:s};
+    })
+  };
+});
+
+/* 第二维度补丁：让行为频率类题目也承载两层信息，避免「一眼看出在测什么」。
+   数组下标 = 选项序号，值与主维度同一套 0-1 口径。 */
+const EXTRA2 = {
+  a13:{transgression:[0.00,0.30,0.35,0.70]},
+  a15:{greed:[0.20,0.40,0.50,0.60]},
+  a16:{greed:[0.10,0.30,0.60,0.80]},
+  a21:{greed:[0.10,0.40,0.70,0.50]},
+  a23:{transgression:[0.10,0.40,0.70,0.60]},
+  a24:{greed:[0.05,0.30,0.60,0.85]},
+  a27:{transgression:[0.05,0.20,0.45,0.70]},
+  a28:{greed:[0.10,0.40,0.70,0.90]},
+  b05:{compassion:[0.50,0.35,0.15,0.10]},
+  b16:{compassion:[0.60,0.45,0.20,0.05]},
+  c01:{nurturing:[0.60,0.30,0.20,0.05]},
+  c02:{nurturing:[0.45,0.35,0.30,0.10]},
+  c10:{lust:[0.25,0.40,0.45,0.40]},
+  c12:{sub:[0.50,0.35,0.20,0.10]},
+  d02:{envy:[0.20,0.40,0.60,0.30]},
+  d08:{transgression:[0.10,0.30,0.60,0.80]},
+  d10:{narc:[0.15,0.35,0.55,0.70]},
+  d11:{greed:[0.20,0.60,0.75,0.50]},
+  d12:{sloth:[0.15,0.35,0.60,0.80]},
+  d14:{transgression:[0.05,0.15,0.40,0.70]},
+  d16:{dom:[0.30,0.45,0.70,0.20]},
+  d18:{pride:[0.20,0.50,0.70,0.80]},
+  d19:{compassion:[0.50,0.35,0.15,0.10]},
+  d23:{sloth:[0.05,0.30,0.60,0.85]},
+  d28:{psych:[0.15,0.30,0.50,0.70]},
+  d31:{compassion:[0.85,0.60,0.45,0.15]},
+  d32:{compassion:[0.85,0.55,0.20,0.10]},
+  d33:{sub:[0.70,0.50,0.25,0.05]}
+};
+Object.keys(EXTRA2).forEach(function(id){
+  const q = Q.find(function(x){ return x.id === id; });
+  if(!q) return;
+  const p = EXTRA2[id];
+  Object.keys(p).forEach(function(dim){
+    p[dim].forEach(function(v,i){ if(q.opts[i]) q.opts[i].s[dim] = v; });
+  });
+});
+
+/* 雷达只画七宗罪（品牌线），其余三组用条形图 */
+const RADAR_KEYS = ['pride','envy','wrath','sloth','greed','gluttony','lust'];
+const DARK_KEYS  = ['mach','narc','psych','sadism'];
+const INT_KEYS   = ['dom','sub','transgression'];
+const POS_KEYS   = ['compassion','nurturing','purelove'];
+const ALL_KEYS   = RADAR_KEYS.concat(DARK_KEYS, INT_KEYS, POS_KEYS);
+
+/* 参照原型：示意性假设值，不是实测常模 */
+const ARCHETYPES = [
+  {id:'avg', name:'普通人', color:'#9aa6bd', v:{
+    pride:48, envy:42, wrath:40, sloth:50, greed:45, gluttony:48, lust:45,
+    mach:42, narc:45, psych:25, sadism:20,
+    dom:50, sub:45, transgression:35, compassion:58, nurturing:55, purelove:55}},
+  {id:'dark', name:'极端反社会', color:'#ff5c7a', v:{
+    pride:85, envy:70, wrath:80, sloth:55, greed:80, gluttony:60, lust:70,
+    mach:92, narc:75, psych:96, sadism:88,
+    dom:75, sub:20, transgression:80, compassion:5, nurturing:5, purelove:15}},
+  {id:'ctrl', name:'控制型', color:'#b07cff', v:{
+    pride:70, wrath:55, mach:72, narc:65, dom:90, sub:12, transgression:55, compassion:30}},
+  {id:'subm', name:'顺从型', color:'#5fd0c0', v:{
+    pride:35, wrath:30, mach:25, narc:30, dom:12, sub:88, transgression:30,
+    compassion:65, nurturing:60, purelove:70}},
+  {id:'emp', name:'高共情者', color:'#43d19e', v:{
+    compassion:92, nurturing:88, purelove:80, psych:6, sadism:6, mach:25, envy:25, wrath:20}},
+  {id:'nurt', name:'照顾者', color:'#7fe3c0', v:{
+    nurturing:92, compassion:85, purelove:75, sub:62, dom:45, sloth:30, pride:40}},
+  {id:'art', name:'创作者', color:'#7c9cff', v:{
+    lust:72, transgression:78, narc:62, pride:62, compassion:50, dom:55, sub:45}}
+];
+function arcVal(a,k){ return a.v[k]===undefined ? 50 : a.v[k]; }
+function arcById(id){ return ARCHETYPES.find(a=>a.id===id) || ARCHETYPES[0]; }
+
+Q.forEach((q,i)=>{ q.i = i; q.o = q.opts; });
+
+/* 题库指纹：题目文本拼接后取 FNV-1a，用于校验代码是否出自同一版题库 */
+function fnv(str){
+  let h = 0x811c9dc5;
+  for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = (h + ((h<<1)+(h<<4)+(h<<7)+(h<<8)+(h<<24))) >>> 0; }
+  return ('00000000'+h.toString(16)).slice(-8);
+}
+const BANK_HASH = fnv(Q.map(q=>q.id + q.txt + JSON.stringify(q.o.map(o=>[o.t,o.s]))).join('|'));
+
+/* =========================================================
+   4. 确定性计分
+   ========================================================= */
+/* 基准：对每个维度，假设「每题随机等概率选一项」，解析地算出该维度的期望与标准差。
+   有了它，每个维度都被换算到同一把尺子上，维度之间才可以互相比较；
+   也顺便回答了「100 是什么意思」——它不是满分，是排在参照人群的最前面。 */
+function buildBaseline(){
+  const b = {};
+  for(const k in DIMS) b[k] = {mean:0, var:0, n:0};
+  Q.forEach(q=>{
+    const keys = {};
+    q.o.forEach(o=>{ for(const k in o.s) keys[k] = 1; });
+    for(const k in keys){
+      const v = q.o.map(o=> o.s[k]===undefined ? 0 : o.s[k]);
+      const n = v.length;
+      const m = v.reduce((a,x)=>a+x,0)/n;
+      b[k].mean += m;
+      b[k].var  += v.reduce((a,x)=>a+(x-m)*(x-m),0)/n;
+      b[k].n++;
+    }
+  });
+  return b;
+}
+const BASELINE = buildBaseline();
+
+/* 标准正态 CDF（Abramowitz-Stegun 近似，误差 < 1e-4），用来把标准分换成百分位 */
+function normalCDF(z){
+  const t = 1/(1+0.2316419*Math.abs(z));
+  const d = 0.3989422804*Math.exp(-z*z/2);
+  const p = d*t*(0.3193815 + t*(-0.3565638 + t*(1.7814780 + t*(-1.8212560 + t*1.3302744))));
+  return z >= 0 ? 1-p : p;
+}
+
+/* 当前年龄桶，用于选择参照样本 */
+var CURRENT_BAND = null;
+
+function scoreAnswers(ans){
+  const raw = {}, mean = {}, varr = {};
+  for(const k in DIMS){ raw[k]=0; mean[k]=0; varr[k]=0; }
+
+  Q.forEach((q,i)=>{
+    const oi = ans[i];
+    if(oi === null || oi === undefined) return;
+    const opt = q.o[oi];
+    if(!opt) return;
+
+    const keys = {};
+    q.o.forEach(o=>{ for(const k in o.s) keys[k] = 1; });
+    for(const k in keys){
+      const v = q.o.map(o=> o.s[k]===undefined ? 0 : o.s[k]);
+      const n = v.length;
+      const m = v.reduce((a,x)=>a+x,0)/n;
+      // 中心性权重：越多的选项在测这个维度，这道题对这个维度越重要。
+      // 否则「顺带提到」的题会把真正针对该维度的题淹没。
+      const w = q.o.filter(o=> o.s[k]!==undefined).length / n;
+      mean[k] += m * w;
+      varr[k] += (v.reduce((a,x)=>a+(x-m)*(x-m),0)/n) * w * w;
+    }
+    for(const k in opt.s){
+      const w = q.o.filter(o=> o.s[k]!==undefined).length / q.o.length;
+      raw[k] += opt.s[k] * w;
+    }
+  });
+
+  const pct = {}, zs = {};
+  for(const k in DIMS){
+    const sd = Math.sqrt(varr[k]);
+    let z = sd > 1e-6 ? (raw[k] - mean[k]) / sd : 0;
+    z = Math.max(-3, Math.min(3, z));
+    zs[k] = z;
+    pct[k] = Math.max(1, Math.min(99, Math.round(normalCDF(z)*100)));
+  }
+
+  /* 一旦本地攒够 30 份同年龄段样本，百分位改用实测分布，不再用模型推算 */
+  const ALL = loadSamples();
+  let S = CURRENT_BAND ? ALL.filter(x=> x.g === CURRENT_BAND) : ALL;
+  if(S.length < 30) S = ALL;
+  if(S.length >= 30){
+    for(const k in DIMS){
+      const arr = S.map(x=> (x.r && typeof x.r[k]==='number') ? x.r[k] : null).filter(v=> v!==null);
+      if(arr.length >= 30){
+        let c = 0;
+        for(let i=0;i<arr.length;i++) if(arr[i] < raw[k]) c++;
+        pct[k] = Math.max(1, Math.min(99, Math.round(c / arr.length * 100)));
+      }
+    }
+  }
+  return {pct:pct, z:zs, raw:raw};
+}
+
+/* ---------- 本地样本池（只存在你自己的浏览器里） ---------- */
+const SAMPLE_KEY = 'psyscan.samples.v2';
+function loadSamples(){
+  try{
+    const s = JSON.parse(localStorage.getItem(SAMPLE_KEY) || '[]');
+    return Array.isArray(s) ? s : [];
+  }catch(e){ return []; }
+}
+function saveSamples(list){
+  try{ localStorage.setItem(SAMPLE_KEY, JSON.stringify(list.slice(-800))); }catch(e){}
+}
+function addSample(ans, raw, band){
+  const list = loadSamples();
+  list.push({t:Date.now(), a:(ans||[]).join(''), r:raw, g:band||'?'});
+  saveSamples(list);
+}
+
+/* α 这里用近似实现：真实 Cronbach 需要每个被试在每个题上的得分，
+   单次作答无法计算，故改用「同维度各题归一值离散度」作为一致性代理，
+   并在 UI 中明确标注为「作答内部离散度」而非正式的 α。 */
+function consistencyOf(ans){
+  const groups = {};
+  for(let i=0;i<Q.length;i++){
+    if(ans[i]===null) continue;
+    const q = Q[i], opt = q.o[ans[i]];
+    for(const k in opt.s) (groups[k] = groups[k]||[]).push(opt.s[k]);
+  }
+  let sum = 0, cnt = 0;
+  for(const k in groups){
+    const g = groups[k];
+    if(g.length < 4) continue;
+    const m = g.reduce((a,b)=>a+b,0)/g.length;
+    const sd = Math.sqrt(g.reduce((a,b)=>a+(b-m)*(b-m),0)/g.length);
+    sum += sd; cnt++;
+  }
+  if(!cnt) return null;
+  return Math.max(0, Math.min(100, Math.round((1 - (sum/cnt)*2.2) * 100)));
+}
+
+/* =========================================================
+   5. 结果代码
+   ========================================================= */
+function b64u(s){
+  return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function unb64u(s){
+  s = s.replace(/-/g,'+').replace(/_/g,'/');
+  while(s.length % 4) s += '=';
+  return decodeURIComponent(escape(atob(s)));
+}
+function makeCode(ans, scores, cons){
+  const payload = {
+    v:1, b:BANK_HASH, t:Date.now(),
+    a: ans.map(x=> x===null||x===undefined ? '.' : x).join(''),
+    s: (function(){ const o={}; for(const k in scores) o[k]=scores[k]; return o; })(),
+    c: cons
+  };
+  const raw = JSON.stringify(payload);
+  return 'PT1.' + b64u(raw) + '.' + fnv(raw);
+}
+function parseCode(code){
+  code = (code||'').trim().replace(/\s+/g,'');
+  const m = /^PT1\.([A-Za-z0-9_-]+)\.([0-9a-f]{8})$/.exec(code);
+  if(!m) throw new Error('格式不对，应该以 PT1. 开头');
+  const raw = unb64u(m[1]);
+  if(fnv(raw) !== m[2]) throw new Error('校验位不匹配，代码可能复制不完整');
+  const p = JSON.parse(raw);
+  p._bankOk = (p.b === BANK_HASH);
+  const ans = [];
+  for(let i=0;i<Q.length;i++){
+    const c = p.a[i];
+    ans.push(c===undefined || c==='.' ? null : (c.charCodeAt(0)-48));
+  }
+  p._ans = ans;
+  if(!p.s) p.s = scoreAnswers(ans).pct;
+  return p;
+}
+
+/* =========================================================
+   6. 渲染
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const state = { ans:new Array(Q.length).fill(null), idx:0, started:0, last:null, arch:'avg', pct:null, queue:null, patch:false, age:null, band:null, agree:true, expanded:false };
+
+/* ---------- 自适应组卷 ----------
+   核心：贪心三轮，每轮给每个维度补一道「还没被选走、且最能代表它」的题。
+   深挖：核心之后，按你的答案挑出最高 2 个 + 最低 2 个维度，各追加最多 2 道更深的题。
+   目的是让「突出的地方更准」，同时保证每个维度至少有 3 道题，而不是靠一道题决定三成。 */
+function itemStrength(q,k){
+  const def = q.o.filter(o=> o.s[k]!==undefined).length;
+  const mx = q.o.reduce((m,o)=> Math.max(m, o.s[k]||0), 0);
+  return (def / q.o.length) * mx;
+}
+function buildPlan(){
+  const dims = Object.keys(DIMS);
+  const core = [];
+  Q.forEach((q,i)=>{ if(q.id.charAt(0) !== 'd') core.push(i); });
+  const deep = {};
+  dims.forEach(k=>{
+    deep[k] = Q.filter(q=> q.id.charAt(0)==='d' && q.primary===k).map(q=>q.i);
+  });
+  return {core:core, deep:deep};
+}
+const PLAN = buildPlan();
+
+/* 本轮改动过的题：只重测这些，其余沿用旧答案 */
+const CHANGED = ['q07','q13','q15','q49','q56','q61','q62'];
+const ALL_IDX = Q.map((q,i)=>i);
+const CHANGED_IDX = CHANGED.map(id=>Q.findIndex(q=>q.id===id)).filter(i=>i>=0);
+
+function show(sec){
+  ['home','age','quiz','done','result'].forEach(s=> $(s).classList.toggle('hidden', s!==sec));
+  window.scrollTo(0,0);
+}
+
+function band(v){
+  if(v>=85) return ['显著','b-high'];
+  if(v>=68) return ['偏高','b-mid'];
+  if(v>=40) return ['中等','b-mid2'];
+  if(v>=22) return ['偏低','b-low'];
+  return ['很低','b-vlow'];
+}
+
+function renderQuiz(){
+  const qi = state.queue[state.idx];
+  const q = Q[qi];
+  const total = state.queue.length;
+  $('qnum').textContent = (state.idx+1) + ' / ' + total + (state.patch ? '（补测）' : '');
+  $('qfill').style.width = ((state.idx+1)/total*100) + '%';
+  $('qcat').textContent = q.type==='lik' ? '自陈' : '情境';
+  $('qtext').textContent = q.txt;
+
+  const box = $('qopts');
+  box.innerHTML = '';
+  q.o.forEach((o,i)=>{
+    const b = document.createElement('button');
+    b.className = 'opt' + (state.ans[qi]===i ? ' sel' : '');
+    b.innerHTML = '<span class="k">'+(i+1)+'</span><span>'+escapeHtml(o.t)+'</span>';
+    b.onclick = ()=> pick(i);
+    box.appendChild(b);
+  });
+  $('btnPrev').disabled = state.idx===0;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function pick(i){
+  state.ans[state.queue[state.idx]] = i;
+  saveProgress();
+  const opts = $('qopts').children;
+  for(let j=0;j<opts.length;j++) opts[j].classList.toggle('sel', j===i);
+  setTimeout(advance, 190);
+}
+
+/* 核心题答完 → 按当前画像追加深挖题 → 再答完就出结果 */
+function advance(){
+  if(state.idx < state.queue.length-1){ state.idx++; saveProgress(); renderQuiz(); return; }
+  if(!state.expanded && !state.patch){
+    const added = expandDeep();
+    if(added.length){
+      state.idx++; saveProgress(); renderQuiz(); return;
+    }
+  }
+  finish();
+}
+
+function expandDeep(){
+  state.expanded = true;
+  const sc = scoreAnswers(state.ans);
+  const keys = Object.keys(DIMS).slice().sort((a,b)=> sc.pct[b]-sc.pct[a]);
+  const focus = keys.slice(0,2).concat(keys.slice(-2));
+  const add = [];
+  focus.forEach(k=>{
+    const cand = PLAN.deep[k] || [];
+    for(let i=0;i<cand.length && add.length<8;i++){
+      const qi = cand[i];
+      if(state.queue.indexOf(qi) < 0 && add.indexOf(qi) < 0) add.push(qi);
+    }
+  });
+  state.queue = state.queue.concat(add);
+  return add;
+}
+
+function finish(){
+  const ans = state.ans;
+  const sc = scoreAnswers(ans);
+  const cons = consistencyOf(ans);
+  const code = makeCode(ans, sc.pct, cons);
+  if(state.agree) addSample(ans, sc.raw, state.band);
+  try{ localStorage.setItem('psyscan.last', code); localStorage.removeItem('psyscan.v1'); }catch(e){}
+  state.last = {scores:sc.pct, cons:cons, code:code, counts:countItems(ans)};
+  renderResult(sc.pct, cons, code, {counts:countItems(ans)});
+  show('result');
+}
+
+/* 本次每维实际答了几道题（用于透明度，也回答「一题占三成」的质疑） */
+function countItems(ans){
+  const out = {};
+  for(const k in DIMS) out[k] = 0;
+  Q.forEach((q,i)=>{ if(ans[i]===null||ans[i]===undefined) return;
+    const keys={}; q.o.forEach(o=>{ for(const d in o.s) keys[d]=1; });
+    for(const d in keys) out[d] = (out[d]||0)+1;
+  });
+  return out;
+}
+
+function saveProgress(){
+  try{
+    localStorage.setItem('psyscan.v1', JSON.stringify({
+      a:state.ans, i:state.idx, t:state.started, q:state.queue, p:state.patch, e:state.expanded
+    }));
+  }catch(e){}
+}
+function loadProgress(){
+  try{
+    const s = JSON.parse(localStorage.getItem('psyscan.v1')||'null');
+    if(s && Array.isArray(s.a) && s.a.length===Q.length) return s;
+  }catch(e){}
+  return null;
+}
+
+function renderResult(scores, cons, code, meta){
+  meta = meta || {};
+  const _sn = loadSamples().length;
+  const _ref = _sn >= 30 ? ('实测样本 ' + _sn + ' 份') : ('模型推算（样本 ' + _sn + '/30）');
+  const _ans = (state.queue || []).length;
+  $('resMeta').textContent = '题库 ' + BANK_HASH + ' · 本次 ' + _ans + ' 题（核心 ' + PLAN.core.length
+    + ' + 深挖 ' + Math.max(0, _ans - PLAN.core.length) + '）· '
+    + (state.band ? '年龄桶 ' + state.band + ' · ' : '') + '参照：' + _ref;
+
+  state.pct = scores;
+  const allKeys = ALL_KEYS;
+  const sorted = allKeys.slice().sort((a,b)=> (scores[b]||0)-(scores[a]||0));
+  $('topCards').innerHTML = sorted.slice(0,3).map(k=>bigCard(k, scores[k])).join('');
+  $('lowCards').innerHTML = sorted.slice(-2).reverse().map(k=>bigCard(k, scores[k])).join('');
+
+  renderChips();
+  renderCompare(scores);
+
+  // 雷达
+  drawRadar(scores);
+  const arc = arcById(state.arch);
+  $('legend').innerHTML = '<span class="lg"><i style="background:#7c9cff"></i>你</span>'
+    + '<span class="lg"><i style="background:'+arc.color+'"></i>'+arc.name+'</span>'
+    + '<span class="lg"><i style="background:#3d4a66"></i>50% 中位线</span>';
+
+  // 暗黑条
+  $('darkBars').innerHTML = DARK_KEYS.map(k=>barHTML(k, scores[k], '#ff7f9e')).join('');
+  $('intBars').innerHTML  = INT_KEYS.map(k=>barHTML(k, scores[k], '#7c9cff')).join('');
+  $('posBars').innerHTML  = POS_KEYS.map(k=>barHTML(k, scores[k], '#43d19e')).join('');
+
+  // 全部维度
+  $('dimAll').innerHTML = ALL_KEYS.map(k=>{
+    const v = Math.max(0, Math.min(100, Number(scores[k]) || 0));
+    const [lab,cls] = band(v);
+    return '<div class="dimcell"><b>'+DIMS[k].n+'</b><i>'+v+'%</i>'
+      + '<div><span class="badge '+cls+'" style="margin-left:0">'+lab+'</span></div></div>';
+  }).join('');
+
+  // 一致性
+  let note = '';
+  if(cons === null || cons === undefined){
+    note = '本次作答不足以估计一致性。';
+  }else if(cons >= 70){
+    note = '作答一致性 ' + cons + '/100：同类情境的回答比较稳定，分数可信度较高。';
+  }else if(cons >= 50){
+    note = '作答一致性 ' + cons + '/100：部分维度内部略有摇摆，属正常范围。';
+  }else{
+    note = '作答一致性 ' + cons + '/100：同类题的回答较不一致，个别维度分数仅供参考。';
+  }
+  $('consNote').textContent = note
+    + (meta.counts ? ('　｜　本次每维题数：' + Object.keys(DIMS).map(k=>DIMS[k].n+' '+meta.counts[k]).join(' · ')) : '');
+
+  const co = $('codeOut'); if(co) co.value = code;
+  const po = $('promptOut'); if(po) po.value = buildPrompt(scores, cons, code);
+}
+
+function barHTML(k, v, color){
+  const c = color || '#7c9cff';
+  v = Math.max(0, Math.min(100, Number(v) || 0));
+  const [lab,cls] = band(v);
+  return '<div class="bar-row"><div class="bar-lab"><span>'+DIMS[k].n
+    + '<span class="badge '+cls+'">'+lab+'</span></span>'
+    + '<span class="v">'+v+'%</span></div>'
+    + '<div class="bar"><span style="width:'+v+'%;background:'+c+'"></span></div></div>';
+}
+
+/* 顶部「最突出的三个」大卡片 */
+function bigCard(k, v){
+  const [lab,cls] = band(v);
+  const g = DIMS[k].g;
+  const tint = g==='sin' ? 'rgba(255,107,107,.08)'
+             : g==='virtue' ? 'rgba(67,209,158,.08)'
+             : g==='dark' ? 'rgba(255,124,158,.08)' : 'rgba(124,156,255,.08)';
+  return '<div class="bigcard" style="background:'+tint+'">'
+    + '<div class="bc-name">'+DIMS[k].n+'</div>'
+    + '<div class="bc-val">'+v+'<span>%</span></div>'
+    + '<div class="bc-band '+cls+'">'+lab+'</div></div>';
+}
+
+/* 参照人群选择 */
+function renderChips(){
+  const box = $('archChips');
+  if(!box) return;
+  box.innerHTML = '<span class="chiplab">叠加对比：</span>' + ARCHETYPES.map(a=>
+    '<button class="chip'+(state.arch===a.id?' on':'')+'" data-a="'+a.id+'"'
+    + (state.arch===a.id ? ' style="border-color:'+a.color+';color:'+a.color+';background:rgba(255,255,255,.04)"' : '')
+    + '>'+a.name+'</button>').join('');
+  Array.prototype.forEach.call(box.querySelectorAll('.chip'), b=>{
+    b.onclick = ()=>{
+      state.arch = b.getAttribute('data-a');
+      renderChips();
+      drawRadar(state.pct);
+      renderCompare(state.pct);
+      const arc = arcById(state.arch);
+      const lg = $('legend');
+      if(lg) lg.innerHTML = '<span class="lg"><i style="background:#7c9cff"></i>你</span>'
+        + '<span class="lg"><i style="background:'+arc.color+'"></i>'+arc.name+'</span>'
+        + '<span class="lg"><i style="background:#3d4a66"></i>50% 中位线</span>';
+    };
+  });
+}
+
+/* 与参照人群的差值 */
+function renderCompare(pct){
+  const a = arcById(state.arch);
+  $('cmpTitle').textContent = '和「' + a.name + '」比';
+  const rows = ALL_KEYS
+    .map(k=>({k:k, d:(pct[k]||0) - arcVal(a,k)}));
+  rows.sort((x,y)=> y.d - x.d);
+  const up = rows.slice(0,4).filter(r=>r.d>2);
+  const dn = rows.slice(-4).filter(r=>r.d<-2).reverse();
+  const list = up.concat(dn);
+  if(!list.length){ $('cmpList').innerHTML = '<p class="sub">和这个原型几乎没有差别。</p>'; return; }
+  $('cmpList').innerHTML = list.map(r=>{
+    const col = r.d>0 ? '#ff8fa3' : '#69b7ff';
+    const w = Math.min(100, Math.abs(r.d)*2);
+    return '<div class="cmprow"><span class="cmpname">'+DIMS[r.k].n+'</span>'
+      + '<span class="cmpbar"><i style="width:'+w+'%;background:'+col+'"></i></span>'
+      + '<span class="cmpval" style="color:'+col+'">'+(r.d>0?'+':'')+r.d+'</span></div>';
+  }).join('')
+  + '<p class="sub" style="margin-top:12px">差值 = 你的百分位 − 该原型的百分位。原型是示意性的，不是实测常模。</p>';
+}
+
+function drawRadar(pct){
+  const svg = $('radar');
+  const W = 660, cx = W/2, cy = W/2 + 6, R = 214;
+  const n = RADAR_KEYS.length;
+  const arc = arcById(state.arch);
+  let out = '';
+
+  out += '<defs>'
+    + '<radialGradient id="radGrad" cx="50%" cy="50%" r="60%">'
+    +   '<stop offset="0%" stop-color="#9db4ff" stop-opacity=".55"/>'
+    +   '<stop offset="60%" stop-color="#7c9cff" stop-opacity=".28"/>'
+    +   '<stop offset="100%" stop-color="#4a6cf7" stop-opacity=".10"/>'
+    + '</radialGradient>'
+    + '<filter id="radGlow" x="-40%" y="-40%" width="180%" height="180%">'
+    +   '<feGaussianBlur stdDeviation="5" result="b"/>'
+    +   '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'
+    + '</filter></defs>';
+
+  const pt = (i, r)=>{
+    const ang = -Math.PI/2 + i*2*Math.PI/n;
+    return [cx + Math.cos(ang)*r, cy + Math.sin(ang)*r];
+  };
+  const poly = (vals, attrs)=>{
+    const pts = [];
+    for(let i=0;i<n;i++){
+      const v = Math.max(0, Math.min(100, vals[i]||0));
+      const p = pt(i, R*v/100);
+      pts.push(p[0].toFixed(1)+','+p[1].toFixed(1));
+    }
+    return '<polygon points="'+pts.join(' ')+'" '+attrs+'/>';
+  };
+
+  // 网格：比之前亮一点，让形状更立
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const pts = [];
+    for(let i=0;i<n;i++){ const p = pt(i, R*f); pts.push(p[0].toFixed(1)+','+p[1].toFixed(1)); }
+    out += '<polygon points="'+pts.join(' ')+'" fill="none" stroke="#2f3a4f" stroke-width="1"/>';
+  });
+  // 50% 中位环
+  const mid = [];
+  for(let i=0;i<n;i++){ const p = pt(i, R*0.5); mid.push(p[0].toFixed(1)+','+p[1].toFixed(1)); }
+  out += '<polygon points="'+mid.join(' ')+'" fill="none" stroke="#3d4a66" stroke-width="1.2" stroke-dasharray="4 5"/>';
+  // 轴线
+  for(let i=0;i<n;i++){
+    const p = pt(i, R);
+    out += '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="#252f42" stroke-width="1"/>';
+  }
+
+  // 参照原型
+  out += poly(RADAR_KEYS.map(k=>arcVal(arc,k)),
+    'fill="none" stroke="'+arc.color+'" stroke-width="1.6" stroke-dasharray="6 5" opacity=".75"');
+
+  // 你：渐变填充 + 发光 + 入场动画
+  const mine = RADAR_KEYS.map(k=> pct[k]||0);
+  out += '<g class="radar-in">';
+  out += poly(mine, 'fill="url(#radGrad)" stroke="#8ea8ff" stroke-width="2.6" stroke-linejoin="round" filter="url(#radGlow)"');
+  out += '</g>';
+
+  // 峰值：找最高的一轴，做光晕
+  let peak = 0;
+  for(let i=1;i<n;i++) if(mine[i] > mine[peak]) peak = i;
+  const pp = pt(peak, R*Math.max(0,Math.min(100,mine[peak]))/100);
+  out += '<circle class="peak-halo" cx="'+pp[0].toFixed(1)+'" cy="'+pp[1].toFixed(1)+'" r="11" fill="#8ea8ff" opacity=".35"/>';
+
+  for(let i=0;i<n;i++){
+    const v = Math.max(0, Math.min(100, mine[i]));
+    const p = pt(i, R*v/100);
+    const isPeak = (i === peak);
+    out += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(isPeak?5.5:3.6)+'" fill="'+(isPeak?'#ffffff':'#9db4ff')+'"/>';
+    const lp = pt(i, R + 30);
+    const isSin = DIMS[RADAR_KEYS[i]].g === 'sin';
+    const anchor = Math.abs(lp[0]-cx) < 12 ? 'middle' : (lp[0] > cx ? 'start' : 'end');
+    out += '<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+4).toFixed(1)+'" text-anchor="'+anchor
+      + '" font-size="'+(isPeak?15:13)+'" font-weight="'+(isPeak?700:400)+'" fill="'+(isPeak?'#e9edf5':(isSin?'#ffb0be':'#a9c6ff'))+'">'
+      + DIMS[RADAR_KEYS[i]].n + ' ' + v + '</text>';
+  }
+  svg.innerHTML = out;
+}
+
+/* =========================================================
+   7. AI 解说提示词（数值锁死）
+   ========================================================= */
+function buildPrompt(scores, cons, code){
+  const keys = ALL_KEYS;
+  const arc = arcById(state.arch);
+  const rows = keys.map(k=>{
+    const v = scores[k] || 0;
+    return '  ' + DIMS[k].n.padEnd(6,'　') + ' ' + String(v).padStart(3,' ') + '%  (' + band(v)[0] + ')';
+  }).join('\n');
+  const cmp = keys
+    .map(k=>({k:k, d:(scores[k]||0) - arcVal(arc,k)}))
+    .sort((x,y)=> Math.abs(y.d)-Math.abs(x.d))
+    .slice(0,6)
+    .map(r=> '  ' + DIMS[r.k].n.padEnd(6,'　') + (r.d>0?'+':'') + r.d + '  （你 ' + (scores[r.k]||0) + '% vs ' + arc.name + ' ' + arcVal(arc,r.k) + '%）')
+    .join('\n');
+  return [
+'【角色】你是「解读器」，不是「评分器」。',
+'下面所有数字都已经由一个确定性计分引擎算好，你只负责把它们翻译成人话。',
+'',
+'【数值含义】',
+'所有数字都是百分位（0–100），不是得分，没有满分。',
+'50 = 参照人群中位；90 = 比九成人更明显；10 = 比九成人更淡。',
+'禁止把 90 说成「90 分」，也不要暗示越高越好——高与低都只是位置。',
+'',
+'【硬性规则】',
+'1. 禁止修改、重算、四舍五入、重新归一化任何数值；禁止新增维度。',
+'2. 任何结论必须能对上具体数值；给不出对应数值的判断就不要写。',
+'3. 不诊断、不贴病理标签、不评价好坏，只描述结构与张力。',
+'4. 中文输出，总长 900–1300 字。',
+'',
+'【输出结构】',
+'一、三句话总览（这个人身上最显眼的三个特征，各带一个百分位数字）。',
+'二、核心张力（找出两组互相拉扯的维度，例如「高节制 + 高越界」，说明它可能怎么在日常里表现出来）。',
+'三、七宗罪 / 七美德（只挑 ≥85 和 ≤22 的说，中间地带一句带过）。',
+'四、暗黑面四维（依据数值说明是「防御性」还是「工具性」，并注意四个维度之间的相对高低）。',
+'五、私密偏好七维（当作偏好结构描述，中性、不猎奇、不评判；若都低于 30 就一句带过）。',
+'六、与参照原型的差异（用下面给出的差值，说清这个人最不像「' + arc.name + '」的地方）。',
+'七、三条具体可执行的建议（每条都要指向一个具体的数值组合）。',
+'八、一句免责声明。',
+'',
+'【本次结果】',
+'题库指纹：' + BANK_HASH + '   题量：' + Q.length + '   一致性：' + (cons===null||cons===undefined?'无法估计':cons+'/100'),
+'',
+'维度百分位（0–100，50 = 中位）：',
+rows,
+'',
+'与「' + arc.name + '」原型差距最大的六项（正 = 你更强）：',
+cmp,
+'',
+'【参照原型的说明】',
+'原型是示意性设定，不是实测常模。解读时可以引用，但不要把它当作同类人群的真实统计。',
+'',
+'【结果代码（仅供存档，你不需要解析它）】',
+code
+  ].join('\n');
+}
+
+/* =========================================================
+   8. 交互绑定
+   ========================================================= */
+$('btnStart').onclick = ()=>{
+  $('ageErr').textContent = '';
+  show('age');
+};
+$('btnAgeOk').onclick = ()=>{
+  const v = parseInt($('ageIn').value, 10);
+  if(!(v >= 1 && v <= 99)){ $('ageErr').textContent = '请填一个有效年龄'; return; }
+  if(v < 16){ $('ageErr').textContent = '本测试包含成人内容，未满 16 岁请不要继续。'; return; }
+  state.age = v;
+  state.band = v < 18 ? '16-17' : v < 25 ? '18-24' : v < 35 ? '25-34' : v < 45 ? '35-44' : '45+';
+  state.agree = !!$('agree').checked;
+  CURRENT_BAND = state.band;
+  state.ans = new Array(Q.length).fill(null);
+  state.idx = 0; state.started = Date.now();
+  state.queue = PLAN.core.slice();
+  state.patch = false; state.expanded = false;
+  try{ localStorage.removeItem('psyscan.v1'); }catch(e){}
+  renderQuiz(); show('quiz');
+};
+$('btnResume').onclick = ()=>{
+  const s = loadProgress();
+  if(!s){ alert('没有找到上次的作答记录。'); return; }
+  state.ans = s.a; state.idx = s.i || 0; state.started = s.t || Date.now();
+  state.queue = (s.q && s.q.length) ? s.q : PLAN.core.slice();
+  state.patch = !!s.p;
+  state.expanded = !!s.e;
+  if(state.idx >= state.queue.length) state.idx = state.queue.length-1;
+  renderQuiz(); show('quiz');
+};
+$('btnRetest').onclick = ()=>{
+  const v = $('codePatch').value;
+  $('patchErr').textContent = '';
+  try{
+    const p = parseCode(v);
+    if(!CHANGED_IDX.length){ $('patchErr').textContent = '本轮题库已整体重建，没有「只重测」模式了，请走完整测试。'; return; }
+    state.ans = p._ans.slice();
+    state.queue = CHANGED_IDX.slice();
+    state.patch = true; state.idx = 0; state.started = Date.now();
+    renderQuiz(); show('quiz');
+  }catch(e){
+    $('patchErr').textContent = e.message;
+  }
+};
+{
+  const bd = $('btnDoc');
+  if(bd) bd.onclick = ()=> $('docBox').classList.toggle('hidden');
+}
+$('btnPrev').onclick = ()=>{ if(state.idx>0){ state.idx--; saveProgress(); renderQuiz(); } };
+$('btnQuit').onclick = ()=>{ saveProgress(); show('home'); };
+$('btnAgain').onclick = ()=>{ $('btnStart').onclick(); };
+$('btnHome').onclick = ()=> show('home');
+$('btnHome2').onclick = ()=> show('home');
+
+$('btnAnalyze').onclick = ()=>{
+  if(!state.last) return;
+  renderResult(state.last.scores, state.last.cons, state.last.code, {});
+  show('result');
+};
+$('btnCopyDone').onclick = e=> copyText($('codeDone').value, e.target);
+$('btnCopyPrompt2').onclick = e=>{
+  if(!state.last) return;
+  copyText(buildPrompt(state.last.scores, state.last.cons, state.last.code), e.target);
+};
+
+{
+  const bp = $('btnParse');
+  if(bp) bp.onclick = ()=>{
+    const v = $('codeIn').value;
+    $('parseErr').textContent = '';
+    try{
+      const p = parseCode(v);
+      if(!p._bankOk && !confirm('这段代码来自不同版本的题库，维度可能对不上。仍要继续吗？')) return;
+      renderResult(p.s, p.c, v.trim(), {});
+      show('result');
+    }catch(err){
+      $('parseErr').textContent = err.message;
+    }
+  };
+}
+
+function copyText(txt, btn){
+  const done = ()=>{ const o = btn.textContent; btn.textContent='已复制'; setTimeout(()=>btn.textContent=o, 1400); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(()=>fallback());
+  } else fallback();
+  function fallback(){
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){ alert('复制失败，请手动选择'); }
+    document.body.removeChild(ta);
+  }
+}
+{ const b = $('btnCopyCode'); if(b) b.onclick = e=> copyText($('codeOut').value, e.target); }
+{
+  const bcp = $('btnCopyPrompt');
+  if(bcp) bcp.onclick = e=> copyText($('promptOut').value, e.target);
+}
+{ const bj = $('btnJson'); if(bj) bj.onclick = ()=>{
+  try{
+    const p = parseCode($('codeOut').value);
+    const blob = new Blob([JSON.stringify(p, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'psyche-scan-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click(); URL.revokeObjectURL(a.href);
+  }catch(e){ alert(e.message); }
+}; }
+
+function refreshSampleStat(){
+  const n = loadSamples().length;
+  const el = $('sampleStat');
+  if(!el) return;
+  el.innerHTML = '当前本地样本：<b>' + n + '</b> 份 · '
+    + (n >= 30 ? '百分位已切换为<b>实测分布</b>' : '还差 <b>' + (30-n) + '</b> 份切换到实测分布');
+}
+
+/* 只在 ?retest=1 链接下露出实验室功能 */
+if(/[?&]retest=1/.test(location.search)){
+  const a = $('labOnly'), b = $('labData');
+  if(a) a.style.display = '';
+  if(b) b.style.display = '';
+}
+$('btnSampleStat').onclick = refreshSampleStat;
+$('btnExportSamples').onclick = ()=>{
+  const list = loadSamples();
+  if(!list.length){ alert('还没有样本'); return; }
+  const blob = new Blob([JSON.stringify(list)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'psyscan-samples-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click(); URL.revokeObjectURL(a.href);
+};
+$('btnImportSamples').onclick = ()=>{
+  const txt = $('sampleIO').value.trim();
+  if(!txt){ alert('先把 JSON 贴进来'); return; }
+  try{
+    const inc = JSON.parse(txt);
+    if(!Array.isArray(inc)) throw new Error('不是一个数组');
+    const cur = loadSamples();
+    const known = new Set(cur.map(x=> x.t + '|' + x.a));
+    let added = 0;
+    inc.forEach(x=>{
+      if(x && x.a && x.r){
+        const key = x.t + '|' + x.a;
+        if(!known.has(key)){ cur.push(x); known.add(key); added++; }
+      }
+    });
+    saveSamples(cur);
+    refreshSampleStat();
+    alert('合并完成，新增 ' + added + ' 份');
+  }catch(e){ alert('解析失败：' + e.message); }
+};
+refreshSampleStat();
+
+document.addEventListener('keydown', e=>{
+  if($('quiz').classList.contains('hidden')) return;
+    if(/^[1-5]$/.test(e.key)){
+    const idx = parseInt(e.key,10)-1;
+    if(idx < Q[state.queue[state.idx]].o.length) pick(idx);
+  }
+  if(e.key === 'ArrowLeft') $('btnPrev').onclick();
+});
+
+/* 首页：没有作答记录就禁用「继续上次」 */
+(function(){
+  try{
+    const s = loadProgress();
+    const b = $('btnResume');
+    if(!s){ b.disabled = true; b.title = '还没有未完成的作答记录'; }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
+
